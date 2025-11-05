@@ -1,0 +1,277 @@
+/* ================================
+   General Page Styling
+================================ */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Refined earthy palette */
+    --primary: #4caf50;
+    --primary-strong: #2e7d32;
+    --accent: #8d6e63; /* soft brown */
+    --accent-dark: #5d4037;
+    --glass-bg: rgba(76, 175, 80, 0.14); /* transparent green box */
+    --text-on-dark: #ffffff;
+    --glow: rgba(76, 175, 80, 0.45);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-on-dark);
+    background-color: #101610;
+    background-image:
+        radial-gradient(1200px 600px at 10% 0%, rgba(76, 175, 80, 0.12), transparent 60%),
+        radial-gradient(900px 500px at 90% 100%, rgba(141, 110, 99, 0.12), transparent 60%),
+        linear-gradient(180deg, rgba(12,18,12,0.75), rgba(12,18,12,0.9)),
+        url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1920&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow: auto; /* allow page scroll when content is taller */
+}
+
+/* Ambient rain overlay */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        repeating-linear-gradient(
+            170deg,
+            rgba(255, 255, 255, 0.08) 0px,
+            rgba(255, 255, 255, 0.08) 2px,
+            transparent 3px,
+            transparent 10px
+        );
+    opacity: 0.12;
+    animation: rainFall 9s linear infinite;
+}
+
+/* subtle vignette for focus */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 200px rgba(0,0,0,0.4);
+}
+
+/* ================================
+   Main Container
+================================ */
+.container {
+    background: var(--glass-bg);
+    padding: 24px 28px;
+    border-radius: 18px;
+    width: 560px; /* smaller height, a bit wider */
+    max-width: calc(100% - 32px);
+    max-height: 90vh; /* keep inside viewport */
+    overflow: auto; /* scroll inside the box if needed */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    text-align: center;
+    backdrop-filter: blur(10px) saturate(120%);
+    border: 1px solid rgba(76,175,80,0.22);
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* Title + Subtitle */
+.container h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 8px var(--glow);
+}
+
+.subtitle {
+    font-size: 14px;
+    margin-bottom: 18px;
+    opacity: 0.85;
+}
+
+/* ================================
+   Form Styling
+================================ */
+.form-box {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    max-width: 360px; /* compact but comfortable */
+    margin: 0 auto; /* centered */
+    gap: 6px;
+}
+
+/* Stepper input group */
+.stepper-input {
+    display: grid;
+    grid-template-columns: 40px 1fr 40px;
+    align-items: center;
+    gap: 8px;
+}
+
+.stepper-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    border-radius: 12px;
+    height: 40px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+    color: var(--text-on-dark);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25), inset 0 -2px 0 rgba(0,0,0,0.2);
+    transition: transform 0.15s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.stepper-btn:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.24), rgba(255,255,255,0.12));
+    transform: translateY(-1px);
+}
+
+.stepper-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25), inset 0 2px 0 rgba(0,0,0,0.2);
+}
+
+.form-box label {
+    margin-top: 10px;
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+.form-box input {
+    padding: 10px 12px;
+    margin-top: 2px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px;
+    outline: none;
+    font-size: 14px;
+    background: rgba(255,255,255,0.15);
+    color: var(--text-on-dark);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+    transition: box-shadow 0.25s ease, transform 0.08s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.form-box input::placeholder {
+    color: rgba(255,255,255,0.75);
+}
+
+.form-box input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(109, 179, 109, 0.35), inset 0 1px 2px rgba(0,0,0,0.2);
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-1px);
+}
+
+/* Professional number inputs (less boring) */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* add subtle stepper hints */
+input[type=number] {
+    background-image:
+        linear-gradient(to right, rgba(255,255,255,0.18), rgba(255,255,255,0.18)) ,
+        radial-gradient(circle at 95% 35%, rgba(255,255,255,0.25) 2px, transparent 3px),
+        radial-gradient(circle at 95% 65%, rgba(255,255,255,0.25) 2px, transparent 3px);
+    background-repeat: no-repeat;
+    background-size: 1px 60%, 6px 6px, 6px 6px;
+    background-position: 96% 50%, 96% 35%, 96% 65%;
+}
+
+/* ================================
+   Button Styling
+================================ */
+.btn {
+    margin-top: 18px;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), #81c784);
+    color: #0c2b0c;
+    border: 0;
+    border-radius: 999px; /* pill */
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.3s ease, background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 18px rgba(76,175,80,0.35), inset 0 -2px 0 rgba(0,0,0,0.15);
+}
+
+.btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, var(--primary-strong), #66bb6a);
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0px 12px 28px rgba(76, 175, 80, 0.45);
+}
+
+.btn:hover::after {
+    left: 120%;
+}
+
+.btn:active {
+    transform: translateY(0) scale(0.99);
+    box-shadow: 0 6px 14px rgba(76,175,80,0.35), inset 0 2px 0 rgba(0,0,0,0.15);
+}
+
+/* ================================
+   Prediction Result Box
+================================ */
+.result-box {
+    margin-top: 22px;
+    padding: 16px 14px;
+    background: linear-gradient(180deg, rgba(76,175,80,0.12), rgba(0,0,0,0.25));
+    border-radius: 16px;
+    border: 1px solid rgba(76,175,80,0.22);
+    animation: fadeInUp 0.8s ease-in-out;
+}
+
+.result-box h2 {
+    font-size: 18px;
+}
+
+.result-box span {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--primary);
+    text-shadow: 0px 0px 8px var(--glow);
+}
+
+/* ================================
+   Animations
+================================ */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rainFall {
+    0% { background-position: 0 -200px; }
+    100% { background-position: 0 200px; }
+}
+
+/* custom slim scrollbars inside the green box */
+.container::-webkit-scrollbar { width: 10px; }
+.container::-webkit-scrollbar-track { background: rgba(255,255,255,0.06); border-radius: 10px; }
+.container::-webkit-scrollbar-thumb { background: rgba(76,175,80,0.35); border-radius: 10px; }
+.container::-webkit-scrollbar-thumb:hover { background: rgba(76,175,80,0.5); }

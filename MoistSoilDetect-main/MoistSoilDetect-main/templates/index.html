@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Soil Moisture Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🌱 Soil Moisture Detection</h1>
+        <p class="subtitle">Enter sensor readings to predict soil moisture levels</p>
+
+        <!-- Input Form -->
+        <form method="POST" class="form-box">
+            <label>Avg PM1:</label>
+            <div class="stepper-input" data-step="0.1">
+                <button type="button" class="stepper-btn" aria-label="Decrease">−</button>
+                <input type="number" step="any" name="avg_pm1" required>
+                <button type="button" class="stepper-btn" aria-label="Increase">+</button>
+            </div>
+
+            <label>Avg PM2:</label>
+            <div class="stepper-input" data-step="0.1">
+                <button type="button" class="stepper-btn" aria-label="Decrease">−</button>
+                <input type="number" step="any" name="avg_pm2" required>
+                <button type="button" class="stepper-btn" aria-label="Increase">+</button>
+            </div>
+
+            <label>Avg PM3:</label>
+            <div class="stepper-input" data-step="0.1">
+                <button type="button" class="stepper-btn" aria-label="Decrease">−</button>
+                <input type="number" step="any" name="avg_pm3" required>
+                <button type="button" class="stepper-btn" aria-label="Increase">+</button>
+            </div>
+
+            <label>Avg AM:</label>
+            <div class="stepper-input" data-step="0.1">
+                <button type="button" class="stepper-btn" aria-label="Decrease">−</button>
+                <input type="number" step="any" name="avg_am" required>
+                <button type="button" class="stepper-btn" aria-label="Increase">+</button>
+            </div>
+
+            <label>Avg Luminosity:</label>
+            <div class="stepper-input" data-step="1">
+                <button type="button" class="stepper-btn" aria-label="Decrease">−</button>
+                <input type="number" step="any" name="avg_lum" required>
+                <button type="button" class="stepper-btn" aria-label="Increase">+</button>
+            </div>
+
+            <label>Avg Temperature (°C):</label>
+            <div class="stepper-input" data-step="0.1">
+                <button type="button" class="stepper-btn" aria-label="Decrease">−</button>
+                <input type="number" step="any" name="avg_temp" required>
+                <button type="button" class="stepper-btn" aria-label="Increase">+</button>
+            </div>
+
+            <label>Avg Humidity (%):</label>
+            <div class="stepper-input" data-step="0.5">
+                <button type="button" class="stepper-btn" aria-label="Decrease">−</button>
+                <input type="number" step="any" name="avg_humd" required>
+                <button type="button" class="stepper-btn" aria-label="Increase">+</button>
+            </div>
+
+            <label>Avg Pressure (hPa):</label>
+            <div class="stepper-input" data-step="0.5">
+                <button type="button" class="stepper-btn" aria-label="Decrease">−</button>
+                <input type="number" step="any" name="avg_pres" required>
+                <button type="button" class="stepper-btn" aria-label="Increase">+</button>
+            </div>
+
+            <button type="submit" class="btn">Predict</button>
+        </form>
+
+        <!-- Prediction Result -->
+        {% if prediction %}
+        <div class="result-box">
+            <h2>Predicted Soil Moisture: <span>{{ prediction }}</span></h2>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        (function(){
+            const wrappers = document.querySelectorAll('.stepper-input');
+            wrappers.forEach(wrap => {
+                const buttons = wrap.querySelectorAll('.stepper-btn');
+                const input = wrap.querySelector('input');
+                const baseStep = parseFloat(wrap.dataset.step || '1');
+                const clamp = (val) => {
+                    const min = input.min !== '' ? parseFloat(input.min) : -Infinity;
+                    const max = input.max !== '' ? parseFloat(input.max) : Infinity;
+                    return Math.max(min, Math.min(max, val));
+                };
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const direction = btn.textContent.trim() === '+' ? 1 : -1;
+                        const multiplier = e.shiftKey ? 10 : 1; // Shift for x10 step
+                        const current = parseFloat(input.value || '0') || 0;
+                        const next = clamp(current + direction * baseStep * multiplier);
+                        input.value = Number.isInteger(baseStep) ? String(Math.round(next)) : String(parseFloat(next.toFixed(6)));
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                        input.dispatchEvent(new Event('change', { bubbles: true }));
+                    });
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
